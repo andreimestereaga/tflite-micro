@@ -276,6 +276,10 @@ MICRO_LITE_BENCHMARKS := $(wildcard $(TENSORFLOW_ROOT)tensorflow/lite/micro/benc
 MICROLITE_BENCHMARK_SRCS := \
 $(wildcard $(TENSORFLOW_ROOT)tensorflow/lite/micro/benchmarks/*benchmark.cc)
 
+MICROLITE_DEFAULT_SPECIALIZED := \
+$(TENSORFLOW_ROOT)tensorflow/lite/micro/micro_log.cc \
+$(TENSORFLOW_ROOT)tensorflow/lite/micro/micro_time.cc
+
 MICROLITE_TEST_SRCS := \
 $(TENSORFLOW_ROOT)tensorflow/lite/micro/fake_micro_context_test.cc \
 $(TENSORFLOW_ROOT)tensorflow/lite/micro/flatbuffer_utils_test.cc \
@@ -478,7 +482,7 @@ include $(MAKEFILE_DIR)/additional_kernels.inc
 
 MICROLITE_CC_SRCS := $(filter-out $(MICROLITE_TEST_SRCS), $(MICROLITE_CC_BASE_SRCS))
 MICROLITE_CC_SRCS := $(filter-out $(MICROLITE_BENCHMARK_SRCS), $(MICROLITE_CC_SRCS))
-
+MICROLITE_CC_SRCS := $(filter-out $(MICROLITE_DEFAULT_SPECIALIZED), $(MICROLITE_CC_SRCS))
 
 
 # The download scripts require that the downloads directory already exist for
