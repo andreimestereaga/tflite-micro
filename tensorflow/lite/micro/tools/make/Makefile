@@ -581,7 +581,20 @@ ifneq ($(CO_PROCESSOR),)
   endif
 endif
 
+# Specialize for debug_log. micro_time etc.
+PATH_TO_TARGET_SRCS := $(TENSORFLOW_ROOT)tensorflow/lite/micro/$(TARGET)
+MICROLITE_CC_SRCS := $(shell python3 $(MAKEFILE_DIR)/specialize_files.py \
+  --base_files "$(MICROLITE_CC_SRCS)" \
+  --specialize_directory $(PATH_TO_TARGET_SRCS))
 
+# The first ifneq is needed to be compatible with make versions prior to 4.2
+# which do not support .SHELLSTATUS. While make 4.2 was released in 2016,
+# Ubuntu 18.04 only has version 4.1
+ifneq ($(.SHELLSTATUS),)
+  ifneq ($(.SHELLSTATUS),0)
+    $(error Error with specialize_files.py $(MICROLITE_CC_SRCS))
+  endif
+endif
 
 ALL_SRCS := \
 	$(MICROLITE_CC_SRCS) \
